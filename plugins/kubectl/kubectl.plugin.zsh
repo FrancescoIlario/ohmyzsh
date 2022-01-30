@@ -8,8 +8,8 @@ if (( $+commands[kubectl] )); then
   command mkdir -p "$ZSH_CACHE_DIR/completions"
   (( ${fpath[(Ie)"$ZSH_CACHE_DIR/completions"]} )) || fpath=("$ZSH_CACHE_DIR/completions" $fpath)
 
-  # If the completion file does not exist, generate it and then source it
-  # Otherwise, source it and regenerate in the background
+  # If the completion file does not exist for the current kubectl version
+  # remove the old ones and generate it. Finally, source it
   kv=$(kubectl version --short --client | cut -d' ' -f 3)
   kd="$ZSH_CACHE_DIR/completions"
   kf="$kd/_kubectl_$kv"
