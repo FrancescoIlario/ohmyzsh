@@ -10,13 +10,14 @@ if (( $+commands[kubectl] )); then
 
   # If the completion file does not exist, generate it and then source it
   # Otherwise, source it and regenerate in the background
-  if [[ ! -f "$ZSH_CACHE_DIR/completions/_kubectl" ]]; then
-    kubectl completion zsh >| "$ZSH_CACHE_DIR/completions/_kubectl"
-    source "$ZSH_CACHE_DIR/completions/_kubectl"
-  else
-    source "$ZSH_CACHE_DIR/completions/_kubectl"
-    kubectl completion zsh >| "$ZSH_CACHE_DIR/completions/_kubectl" &|
+  kv=$(kubectl version --short --client | cut -d' ' -f 3)
+  kd="$ZSH_CACHE_DIR/completions"
+  kf="$kd/_kubectl_$kv"
+  if [[ ! -f "$kf" ]]; then
+    rm -f $kd/_kubectl*
+    kubectl completion zsh >| "$kf"
   fi
+  source "$kf"
 fi
 
 # This command is used a LOT both below and in daily life
